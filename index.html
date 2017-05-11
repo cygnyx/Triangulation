@@ -1,0 +1,268 @@
+<html>
+<head>
+<TITLE>Delaunay Triangulation</TITLE>
+<style type="text/css">
+a:link { color: #000000; }
+a:visited { color: #000000; }
+a:hover { color: #505050; }
+a:active { color: #000000; }
+td {
+  padding: 3em;
+}
+</style>
+</head>
+<body>
+<div style="margin: 0% 10% 0% 10%">
+
+<H1><a href="..">cygnyx</a></H1>
+<H2>Delaunay Triangulation</H2>
+<p>
+<APPLET WIDTH="700" HEIGHT="300" CODEBASE="." CODE="ericco.delaunay.TriangulationViewer.class">
+</APPLET>
+</p>
+<p>
+I created this applet around 1996.
+It has two source files <a href="src/Delaunay.java">Delaunay.java</a>
+which calculates the Delaunay triangulation in 2d, and
+<a href="src/TriangulationViewer.java">Triangulation.java</a>
+which contains the user interface elements.
+Your browser may not support running Java applets or
+it may have strict security controls that prevent the
+applet from running.
+You may need to confirm that it is OK to run this applet.
+Also, browsers may not support the use of a status bar,
+which this applet uses as a user interface element.
+In any case, you can still run the applet by downloading
+this repository and then execute:
+</p>
+<p>
+appletviewer index.html
+</p>
+<p>
+To use all the features of the applet, you will have to
+adjust the Java security policy.
+A sample policy file is included: <a href="src/applet.security.policy">applet.security.policy</a>.
+To set a background color might be done with:
+</p>
+<p>
+appletviewer -J-Djava.security.policy=applet.security.policy -J-Dblack=0x909090 index.html
+</p>
+At the time, I wrote this tutorial on triangulation.
+I thought, and still think, it is interesting to use these applets to
+generate static figures that highlight elements as the cursor hovers over it.
+
+<h2>Tutorial</h2>
+<table>
+<tr>
+<td>
+<p>
+This tutorial examines <em>triangulation</em> in 2 dimensions.
+Triangulation starts with a set of points in a plane.
+By connecting the points to each other with line segments that
+don't intersect, a triangulation is formed.  For example, Figure
+1 is a triangulation of 4 points.
+Each red point is connected to another red point.
+We will discuss the yellow points later.
+</p>
+<p>
+It might have occured to you that there are two different triangulations
+for the 4 points in Figure 1.  The other triangulation would have connected
+the top point to the point in the lower left hand corner.  However, the
+depicted triangulation is, in a sense, better than the alternative.
+For example, the line in the alternative solution is longer than the
+line depicted in Figure 1.  This is an important point.  This means that
+the bottom three points are closer together than the left three points.
+This concept of closeness is intuitive to people, but more difficult to
+describe in an algorithm.
+</p>
+</td>
+<td>
+<applet codebase="." code="ericco.delaunay.TriangulationViewer.class" width="200" height="200">
+<param name="display" value="Triangles">
+<param name="data" value="0,0,0,1,1,2,2,1">
+<param name="label" value="Figure 1">
+<param name="foreground" value="none">
+</applet>
+</td>
+</tr>
+<tr>
+<td>
+<p>
+Figure 2 contains 10 points.  Try to visualize
+how these points should be connected so that all the
+closest points form the triangles in the triangulation.
+</p>
+<p>
+As you can see, even for a small set of points it can
+be difficult to construct the best triangulation.  As
+you move your cursor over the figure, the triangles
+that form the best triangulation will be highlighted.
+</p>
+<p>
+This particular notion of a best triangulation is known as
+Delaunay Triangluation.  The Delaunay Triangulation has a
+number of features that make it useful engineering and science.
+For example, Delaunay Triangulation is used in astronomy for
+identifying clusters of astronomical objects.
+</td>
+<td>
+<applet codebase="." code="ericco.delaunay.TriangulationViewer.class" width="200" height="200">
+<param name="display" value="Points">
+<param name="data" value="0,0,5,7,2,3,5,1,9,1,8,3,1,8,5,4,3,6,7,5">
+<param name="label" value="Figure 2">
+<param name="foreground" value="fillTriangle">
+</applet>
+</td>
+</tr>
+
+<tr>
+<td>
+<p>
+Related to triangulation is tessellation.  Figure 3
+contains the tessellation of the same 10 points as
+in Figure 2.
+</p>
+<p>
+The tessellation divides the plane into polygon regions.
+Each region contains a single data point.
+All points within a region are closer to this data
+point than any other data point.
+As you move your cursor over the figure, the underlying
+triangles of the triangulation will be highlighted.
+You've probably also noticed that the yellow dots are located at
+the corners of the regions outlined by the tessellation.
+This is not a coincidence.  The tessellation and the triangulation
+are tightly coupled mathematical notions.  Essentially they are
+two means for specifying the same information.  Such closely related
+notions are called "duals".
+</p>
+<p>
+You may also have noticed a relationship between the line segments
+that form the tessellation and the highlight triangles of the
+triangulation.  Each line in the tesselation is perpendicular to
+one of the lines in the triangle.  In fact, each line segment in
+the tesselation is on the perpendicular bisector of a leg of one
+of the triangles.
+</p>
+<p>
+The Dirichlet tessellation is the dual of the Delaunay triangulation.
+The vertices of the tesselation occur where three neighboring regions
+meet.  This is the location of the yellow dots.
+</p>
+</td>
+<td>
+<applet codebase="." code="ericco.delaunay.TriangulationViewer.class" width="200" height="200">
+<param name="display" value="Tessellation">
+<param name="data" value="0,0,5,7,2,3,5,1,9,1,8,3,1,8,5,4,3,6,7,5">
+<param name="label" value="Figure 3">
+<param name="foreground" value="drawTriangle">
+</applet>
+</td>
+</tr>
+
+
+<tr>
+<td>
+<p>
+To review for a moment, the red dots are the data
+points and are the vertices of the Delaunay triangles.
+The yellow dots are the vertices of the Dirichlet
+tessellation.
+</p>
+<p>
+In general, each yellow dot is at the meeting point
+of three neighboring regions.  <em>Therefore, each
+yellow dot is the same distance away from the red
+dots that are at the center of the three neighboring
+regions.</em>  There is only one point that is the
+same distance away from all three points.  If the
+three red dots are on the perimeter of a circle, then
+the yellow dot would be the circle's center.
+Figure 4 is the same as Figure 3.  However, your cursor
+will highlight the circumcircle of the underlying triangle.
+It will also highlight the center of the circumcircle.
+</p>
+<p>
+The <em>circumcircle</em> is the smallest circle that contains
+the three points.  Since it is the smallest such circle, then the
+three points must be on the edge of the circle.  Since the yellow
+dot is equidistant from the three red dots, it must be at the center
+of the circumcircle.
+</p>
+<p>
+As you move your cursor over the Figure 4, you may have noticed that
+there are no red dots on the inside of the circumcircle.  Again,
+this is no coincidence.  Suppose that there were a red dot inside
+of the circle.  This means that the yellow dot is closer to the
+new red dot than any of the original 3 red dots.  And that doesn't
+make any sense, because we know that the yellow dot is closer to
+the original 3 red dots than any other red dots.  This is a
+contradiction and therefore our supposition is incorrect.  That is,
+there cannot be a red dot inside of the circumcircle.
+</p>
+
+</td><td>
+<applet codebase="." code="ericco.delaunay.TriangulationViewer.class" width="200" height="200">
+<param name="display" value="Tessellation">
+<param name="data" value="0,0,5,7,2,3,5,1,9,1,8,3,1,8,5,4,3,6,7,5">
+<param name="label" value="Figure 4">
+<param name="foreground" value="drawOval">
+</applet>
+</td>
+<tr>
+<td>
+Knowing that no other red dots can appear inside of the
+circumcircle of a properly formed triangle in a Delaunay
+triangulation is very useful.  But, like with most things,
+there are exceptions.  For example look at Figure 5.  These
+four points form a square.  The opposite diagonal of the square
+could have been used to form the triangluation of these 4
+points. All four points are equidistant from the yellow dot
+at the center of the square.
+</p>
+<p>
+Fortuately, these types of <em>degenerate</em> cases are unlikely
+to occur and in practice have little or no consequence.
+</p>
+<p>
+Can you think of any other degenerate cases?
+</p>
+</td><td>
+<applet codebase="." code="ericco.delaunay.TriangulationViewer.class" width="200" height="200">
+<param name="display" value="Triangles">
+<param name="data" value="0,0,1,1,0,1,1,0">
+<param name="label" value="Figure 5">
+<param name="foreground" value="drawOval">
+</applet>
+</td>
+
+<tr>
+<td>
+Another interesting aspect of Delaunay triangle has to do
+with the size of the angles in the triangles.  For example,
+Figure 6 is the triangulation of a parallelogram.
+Consider the angles in the 2 triangles that make up the triangulation.
+By construction the 2 triangles are similar.
+All 3 angles in the triangle are roughly the same
+and it is difficult to see which angle is the smallest.
+Now consider the alternative triangulation using the opposite diagonal:
+this would have a smaller angle near the top and bottom of the figure,
+and a larger angle on the left and right of the figure.
+The Delaunary triangulation maximizes the minimum of the angles in the
+triangles.
+This is the attribute that makes this triangulation a good measure of closeness.
+</td>
+<td>
+<applet codebase="." code="ericco.delaunay.TriangulationViewer.class" width="200" height="200">
+<param name="display" value="Triangles">
+<param name="data" value="0,0,.1,1,1,2,.9,.9">
+<param name="label" value="Figure 6">
+<param name="foreground" value="fillTriangle">
+</applet>
+</td>
+
+</table>
+
+</div>
+</body>
+</html>
